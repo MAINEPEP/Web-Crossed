@@ -72,6 +72,7 @@ const {
     Mimetype,
     MimetypeMap,
     MediaPathMap,
+    isJidUser,
     DisconnectReason,
     MediaConnInfo,
     ReconnectMode,
@@ -79,7 +80,7 @@ const {
     waChatKey,
     WAProto,
     BaileysError,
-} = require('lotusbail');
+} = require('@whiskeysockets/baileys');
 const pino = require("pino");
 const { Telegraf, Markup } = require("telegraf");
 
