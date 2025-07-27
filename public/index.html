@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Secure Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    @keyframes slideInUp {
+      from { 
+        opacity: 0; 
+        transform: translateY(30px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(138, 43, 226, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 
+        0 0 30px rgba(138, 43, 226, 0.6),
+        0 0 60px rgba(138, 43, 226, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    .logo:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 
+        0 0 40px rgba(138, 43, 226, 0.8),
+        0 0 80px rgba(138, 43, 226, 0.4);
+    }
+
+    h2 {
+      background: linear-gradient(135deg, #ffffff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .form-group {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: rgba(138, 43, 226, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 
+        0 0 20px rgba(138, 43, 226, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+      top: -8px;
+      left: 12px;
+      font-size: 12px;
+      color: #a78bfa;
+      background: linear-gradient(135deg, #0c0c0c, #1a1a2e);
+      padding: 0 8px;
+      border-radius: 4px;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 10px 30px rgba(138, 43, 226, 0.4),
+        0 0 40px rgba(138, 43, 226, 0.2);
+      background: linear-gradient(135deg, #9333ea, #c026d3);
+    }
+
+    .login-btn:hover::before {
+      left: 100%;
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      display: none;
+      animation: slideInDown 0.3s ease;
+    }
+
+    @keyframes slideInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .forgot-password {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password:hover {
+      color: #a78bfa;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 30px 20px;
+        margin: 0 15px;
+        border-radius: 16px;
+      }
+      
+      h2 {
+        font-size: 24px;
+      }
+      
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .form-group input {
+        padding: 14px;
+        font-size: 16px; /* Prevent zoom on iOS */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <div class="card">
+      <div class="logo-container">
+        <img src="https://files.catbox.moe/15a52r.jpg" alt="Logo" class="logo" />
+      </div>
+      
+      <h2>Welcome Back</h2>
+      
+      <form onsubmit="login(event)" class="w-100" style="width: 100%;">
+        <div class="form-group">
+          <input type="text" id="username" placeholder=" " required />
+          <label for="username">Username</label>
+        </div>
+        
+        <div class="form-group">
+          <input type="password" id="password" placeholder=" " required />
+          <label for="password">Password</label>
+        </div>
+        
+        <button type="submit" class="login-btn" id="loginBtn">
+          <div class="loading" id="loading"></div>
+          <span id="btnText">Sign In</span>
+        </button>
+        
+        <div class="error-message" id="errorMessage"></div>
+      </form>
+      
+      <a href="#" class="forgot-password">Forgot your password?</a>
+    </div>
+  </div>
+
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Initialize particles
+    createParticles();
+
+    // Enhanced login function
+    async function login(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+      const loading = document.getElementById('loading');
+      const btnText = document.getElementById('btnText');
+      const errorMessage = document.getElementById('errorMessage');
+
+      // Validation
+      if (!username || !password) {
+        showError('Please fill in all fields');
+        return;
+      }
+
+      // Show loading state
+      loginBtn.disabled = true;
+      loading.style.display = 'inline-block';
+      btnText.textContent = 'Signing In...';
+      errorMessage.style.display = 'none';
+
+      try {
+        // Simulate API call (replace with your actual endpoint)
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          btnText.textContent = 'Success!';
+          
+          // Store token in memory instead of localStorage
+          window.authToken = data.token;
+          
+          // Redirect after brief delay
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 1000);
+        } else {
+          throw new Error(data.message || 'Login failed');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        showError(error.message || 'Login failed. Please try again.');
+      } finally {
+        // Reset button state
+        setTimeout(() => {
+          loginBtn.disabled = false;
+          loading.style.display = 'none';
+          btnText.textContent = 'Sign In';
+        }, 1000);
+      }
+    }
+
+    function showError(message) {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      
+      // Auto-hide error after 5 seconds
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    // Enhanced input interactions
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          login(e);
+        }
+      });
+    });
+
+    // Add subtle animations on load
+    window.addEventListener('load', () => {
+      document.body.style.animation = 'none';
+    });
+  </script>
+</body>
+</html>

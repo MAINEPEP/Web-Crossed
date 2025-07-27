@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crossed - AlwaysNoe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating Particles */
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      animation: slideInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(138, 43, 226, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Menu Button */
+    #menu {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 14px;
+      padding: 10px 15px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: white;
+      border: none;
+      box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    #menu:hover {
+      background: linear-gradient(135deg, #9333ea, #c026d3);
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
+      transform: translateY(-2px);
+    }
+
+    h2 {
+      background: linear-gradient(135deg, #ffffff, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .form-group {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: rgba(138, 43, 226, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.2),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label {
+      top: -8px;
+      left: 12px;
+      font-size: 12px;
+      color: #a78bfa;
+      background: linear-gradient(135deg, #0c0c0c, #1a1a2e);
+      padding: 0 8px;
+      border-radius: 4px;
+    }
+
+    button.send-btn {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    button.send-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4),
+                  0 0 40px rgba(138, 43, 226, 0.2);
+      background: linear-gradient(135deg, #9333ea, #c026d3);
+    }
+
+    button.send-btn:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 20px 15px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <!-- Tombol Menu -->
+  <button id="menu" onclick="goToDdos()">Menu DDoS</button>
+
+  <div class="container">
+    <div class="card">
+      <h2>Crossed Bug</h2>
+
+      <div class="form-group">
+        <input type="text" id="nomor" placeholder=" " required />
+        <label for="nomor">Enter Target</label>
+      </div>
+
+      <div class="form-group">
+        <select id="metode">
+          <option value="foreclose">FORECLOSE</option>
+          <option value="blank">BLANK</option>
+          <option value="ios">IOS</option>
+          <option value="delay">DELAY</option>
+          <option value="native">CALL</option>
+          <option value="combo">COMBO</option>
+        </select>
+      </div>
+
+      <button class="send-btn" onclick="SentBug()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 40; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = Math.random() * 4 + 2 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    function goToDdos() {
+      window.location.href = "/ddos-dashboard";
+    }
+
+    async function SentBug() {
+      const token = localStorage.getItem("token");
+      const nomor = document.getElementById("nomor").value;
+      const metode = document.getElementById("metode").value;
+
+      if (!nomor || !metode) return alert("Please fill all fields!");
+
+      try {
+        const res = await fetch(`/attack/metode?target=${encodeURIComponent(nomor)}&metode=${metode}`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        alert(data.message || data.result || 'Selesai');
+      } catch (err) {
+        alert("Error sending request.");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
